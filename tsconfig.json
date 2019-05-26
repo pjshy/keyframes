@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "baseUrl": "./src",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "dom",
+      "es5",
+      "es6",
+      "es7"
+    ],
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "strict": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
