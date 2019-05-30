@@ -13,15 +13,16 @@
 
 // murmurhash3 via https://github.com/garycourt/murmurhash-js/blob/master/murmurhash3_gc.js
 
-export function hashString(key: string) {
-	let remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i
+export function hashString (key: string) {
+	let k1
+	let h1b
+	let h1 = 1 * 1
 
-	remainder = key.length & 3 // key.length % 4
-	bytes = key.length - remainder
-	h1 = 1 * 1
-	c1 = 0xcc9e2d51
-	c2 = 0x1b873593
-	i = 0
+	const remainder = key.length & 3 // key.length % 4
+	const bytes = key.length - remainder
+	const c1 = 0xcc9e2d51
+	const c2 = 0x1b873593
+	let i = 0
 
 	while (i < bytes) {
 		k1 =
