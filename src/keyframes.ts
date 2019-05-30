@@ -1,8 +1,8 @@
 import * as CSS from 'csstype'
 
-import { serializeStyle } from './css'
+import { serializeStyle } from 'css'
 import { hashString } from 'hash'
-import { applyStyleRule } from './dom'
+import { applyStyleRules } from 'dom'
 
 type KeyframesRule = {
   [key: string]: CSS.Properties,
@@ -29,7 +29,7 @@ export function keyframes (rule: KeyframesRule | string) {
 
   chunks.push('}')
 
-  applyStyleRule(chunks.join())
+  applyStyleRules([chunks.join('')])
   /**
    * @todo cache
    * @body design a cache for same rule

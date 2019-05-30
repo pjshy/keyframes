@@ -1,19 +1,33 @@
-export const isBrowser = !!document
+import { IS_BROWSER, STYLE_ID } from 'constant'
 
-export function applyStyleRule (rule: string) {
-  if (isBrowser) {
-    const style = document.createElement('style')
+export function applyStyleRules (rules: string[]) {
+  if (IS_BROWSER) {
+    let styleTag = document.querySelector<HTMLStyleElement>(`#${STYLE_ID}`)
 
-    document.getElementsByTagName('head')[0].appendChild(style)
-
-    const styleSheet = document.styleSheets[document.styleSheets.length - 1] as CSSStyleSheet
-
-    if (typeof styleSheet.insertRule === 'function') {
-      styleSheet.insertRule(rule, styleSheet.rules.length)
-    } else {
-      /**
-       * @todo polyfill for IE
-       */
+    if (!styleTag) {
+      styleTag = document.createElement('style')
+      styleTag.id = STYLE_ID
+      document.getElementsByTagName('head')[0].appendChild(styleTag)
     }
+
+    const sheet = styleTag.sheet as CSSStyleSheet
+
+    if (sheet.insertRule) {
+      rules.reduce((index, rule) => {
+        try {
+          sheet.insertRule(rule, index)
+        } catch (e) {
+          console.warn(`The ${rule} wasn't compatible in the browser`)
+        }
+
+        return index + 1
+      }, sheet.cssRules.length)
+    } else {
+      styleTag.innerText = (styleTag.innerHTML || '') + rules.join('')
+    }
+  } else {
+    /**
+     * @todo support for server-render
+     */
   }
 }
