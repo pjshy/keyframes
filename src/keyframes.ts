@@ -4,7 +4,7 @@ import { serializeStyle } from 'css'
 import { hashString } from 'hash'
 import { applyStyleRules } from 'dom'
 
-type KeyframesRule = {
+export type KeyframesRule = {
   [key: string]: CSS.Properties,
   from: CSS.Properties,
   to: CSS.Properties,
