@@ -1,6 +1,13 @@
 import { IS_BROWSER, STYLE_ID } from 'constant'
+import { Cache } from 'cache'
 
-export function applyStyleRules (rules: string[]) {
+const injectCache = new Cache()
+
+export function applyStyleRules (key: string, rules: string[]) {
+  if (injectCache.has(key)) {
+    return
+  }
+
   if (IS_BROWSER) {
     let styleTag = document.querySelector<HTMLStyleElement>(`#${STYLE_ID}`)
 
