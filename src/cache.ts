@@ -1,15 +1,15 @@
-export class Cache {
-  private cacheMap = new Map<string, string>()
+export type StyleString = string & { kind?: 'StyleString' }
 
-  set (name: string, rule: string) {
-    return this.cacheMap.set(name, rule)
+class Cache {
+  private registered: {[key: string]: StyleString} = {}
+
+  get (key: string) {
+    return this.registered[key] || ''
   }
 
-  delete (name: string) {
-    return this.cacheMap.delete(name)
-  }
-
-  has (name: string) {
-    return this.cacheMap.has(name)
+  set (key: string, style: StyleString) {
+    this.registered[key] = style
   }
 }
+
+export const cache = new Cache()

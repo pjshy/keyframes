@@ -3,6 +3,7 @@ import * as CSS from 'csstype'
 import { serializeStyle } from 'css'
 import { hashString } from 'hash'
 import { applyStyleRules } from 'dom'
+import { cache, StyleString } from 'cache'
 
 export type KeyframesRule = {
   [key: string]: CSS.Properties,
@@ -10,24 +11,30 @@ export type KeyframesRule = {
   to: CSS.Properties,
 }
 
-export function keyframes (rule: KeyframesRule | string) {
-  const hash = hashString(typeof rule === 'object' ? JSON.stringify(rule) : `${rule}`)
+export function keyframes (rule: KeyframesRule) {
+  const hash = hashString(JSON.stringify(rule))
   const animationName = `animation-${hash}`
+
+  const cachedStyle = cache.get(animationName)
+
+  if (cachedStyle) {
+    return cachedStyle
+  }
 
   let serialized = ''
 
-  if (typeof rule === 'object') {
-    const selectors = Object.keys(rule)
+  const keywords = Object.keys(rule)
 
-    serialized = selectors.map((selector) => {
-      const style = serializeStyle(rule[selector])
-      return `${selector}: ${style}`
-    }).join('')
-  } else {
-    serialized = rule
-  }
+  serialized = keywords.map((keyword) => {
+    const style = serializeStyle(rule[keyword])
+    return `${keyword} ${style}`
+  }).join('')
 
-  applyStyleRules(animationName, [serialized])
+  const styleRule: StyleString = `${animationName} {${serialized}}`
+
+  applyStyleRules([styleRule])
+
+  cache.set(animationName, styleRule)
 
   return animationName
 }
